@@ -19,7 +19,7 @@ reader = Reader(line_format='user item rating timestamp', sep=',', rating_scale=
 data = Dataset.load_from_file(file_path, reader=reader)
 
 
-def plotgraphs(x_axis, y_axis, nameofyaxis = 'y-axis', nameofxaxis = 'x-axis', title = 'Title'):
+def plotgraphs(x_axis, y_axis, nameofxaxis = 'x-axis', nameofyaxis = 'y-axis', title = 'Title'):
 
     plt.plot(x_axis,y_axis)
     plt.xlabel(nameofxaxis, size = 15)
@@ -82,6 +82,7 @@ for r in data.raw_ratings:
     ratings[r[1]].append(r[2])
 
 ###############################################################################################
+
 
 popular_movies = [x for x in ratings if len(ratings[x]) > 2]
 unpopular_movies = [x for x in ratings if len(ratings[x]) <= 2]
