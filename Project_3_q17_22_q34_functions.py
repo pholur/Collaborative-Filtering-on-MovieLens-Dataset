@@ -179,35 +179,41 @@ def get_roc_params(algo, data, threshold):
     return fpr, tpr, t
 
 
-Threshold = [2.5, 3, 3.5, 4] # thresholds
-# KNN
-best_k = 20
-sim_options = {'name' : 'pearson' , 'user_based' : True}
-algo = KNNWithMeans(k=best_k, sim_options=sim_options,verbose=True)
-fpr_knn, tpr_knn, t_knn = get_roc_params(algo=algo, data=data, threshold=Threshold)
-# NMF
-best_k = 20
-fpr_nmf, tpr_nmf, t_nmf = get_roc_params(algo=NMF(best_k, verbose=False), data=data, threshold=Threshold)
-# MF
-best_k = 20
-fpr_svd, tpr_svd, t_svd = get_roc_params(algo=SVD(best_k, verbose=False), data=data, threshold=Threshold)
+if __name__ == '__main__':
+    Threshold = [2.5, 3, 3.5, 4] # thresholds
+    # KNN
+    best_k = 20
+    sim_options = {'name' : 'pearson' , 'user_based' : True}
+    algo = KNNWithMeans(k=best_k, sim_options=sim_options,verbose=True)
+    fpr_knn, tpr_knn, t_knn = get_roc_params(algo=algo, data=data, threshold=Threshold)
+    # NMF
+    best_k = 20
+    fpr_nmf, tpr_nmf, t_nmf = get_roc_params(algo=NMF(best_k, verbose=False), data=data, threshold=Threshold)
+    # MF
+    best_k = 20
+    fpr_svd, tpr_svd, t_svd = get_roc_params(algo=SVD(best_k, verbose=False), data=data, threshold=Threshold)
 
-for i, thresh in enumerate(Threshold):
-    fig, ax = plt.subplots()
-    roc_auc_knn = auc(fpr_knn[i], tpr_knn[i])
-    roc_auc_nmf = auc(fpr_nmf[i], tpr_nmf[i])
-    roc_auc_svd = auc(fpr_svd[i], tpr_svd[i])
-    ax.plot(fpr_knn[i], tpr_knn[i], lw=2, label='area under curve = %0.4f' % roc_auc_knn)
-    ax.plot(fpr_nmf[i], tpr_nmf[i], lw=2, label='area under curve = %0.4f' % roc_auc_nmf)
-    ax.plot(fpr_svd[i], tpr_svd[i], lw=2, label='area under curve = %0.4f' % roc_auc_svd)
-    ax.grid(color='0.7', linestyle='--', linewidth=1)
-    ax.set_xlim([-0.1, 1.1])
-    ax.set_ylim([0.0, 1.05])
-    ax.set_xlabel('False Positive Rate', size=15)
-    ax.set_ylabel('True Positive Rate', size=15)
-    ax.legend(loc="lower right")
+    for i, thresh in enumerate(Threshold):
+        fig, ax = plt.subplots()
+        roc_auc_knn = auc(fpr_knn[i], tpr_knn[i])
+        roc_auc_nmf = auc(fpr_nmf[i], tpr_nmf[i])
+        roc_auc_svd = auc(fpr_svd[i], tpr_svd[i])
 
-    for label in ax.get_xticklabels() + ax.get_yticklabels():
-        label.set_fontsize(15)
-    plt.title('Threshold  = %0.2f' % thresh, size=15)
-    plt.show()
+        ll1 = 'KNN area under curve = %0.4f' % roc_auc_knn
+        ll2 = 'NNMF area under curve = %0.4f' % roc_auc_nmf
+        ll3 = 'MF area under curve = %0.4f' % roc_auc_svd
+
+        l1, = ax.plot(fpr_knn[i], tpr_knn[i], lw=2)
+        l2, = ax.plot(fpr_nmf[i], tpr_nmf[i], lw=2)
+        l3, = ax.plot(fpr_svd[i], tpr_svd[i], lw=2)
+        ax.grid(color='0.7', linestyle='--', linewidth=1)
+        ax.set_xlim([-0.1, 1.1])
+        ax.set_ylim([0.0, 1.05])
+        ax.set_xlabel('False Positive Rate', size=15)
+        ax.set_ylabel('True Positive Rate', size=15)
+        ax.legend((l1,l2,l3),(ll1,ll2,ll3),loc="lower right")
+
+        for label in ax.get_xticklabels() + ax.get_yticklabels():
+            label.set_fontsize(15)
+        plt.title('Threshold  = %0.2f' % thresh, size=15)
+        plt.show()
