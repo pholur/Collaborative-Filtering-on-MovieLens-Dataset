@@ -81,8 +81,8 @@ def metrics(predictions, t, threshold=threshold):
         magG_I_S = sum(((true_rating >= threshold) and (est_rating >= threshold) and bolo == False)
                               for (true_rating, est_rating, bolo) in user_ratings[:t])
 
-        prec = prec + magG_I_S / magS
-        reca = reca + magG_I_S / magG
+        prec = prec + magG_I_S / float(magS)
+        reca = reca + magG_I_S / float(magG)
 
         number_of_users = number_of_users + 1.0
 
