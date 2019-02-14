@@ -18,9 +18,15 @@ def Question24(data):
 
     # Plot
     plt.plot(ks, RMSE)
+    plt.xlabel('k')
+    plt.ylabel('Average RMSE')
+    plt.savefig('Q24_RMSE.png')
     plt.figure()
     plt.plot(ks, MAE)
-    plt.show()
+    plt.xlabel('k')
+    plt.ylabel('Average MAE')
+    plt.savefig('Q24_MAE.png')
+
     
     index = np.argmin(RMSE)
     print("Best k: %i" % ks[index] )
@@ -44,7 +50,9 @@ def trimmed_test_MF(data, choice = 0):
         
     # Plot
     plt.plot(ks, avg_RMSEs)
-    plt.show()
+    plt.xlabel('k')
+    plt.ylabel('Average RMSE')
+    plt.savefig('RMSE_' + str(choice) + '.png')
 
     index = np.argmin(avg_RMSEs)
     print("Best k: %i" % ks[index] )
@@ -55,7 +63,6 @@ def trimmed_test_MF(data, choice = 0):
 if __name__ == '__main__':
     data = retrieve_data()
     Question24(data)
-    
     # Question 26
     print("Trimmed Test Set: Popular movies")
     trimmed_test_MF(data, 1)

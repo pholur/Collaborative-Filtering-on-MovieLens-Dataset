@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from Project3_1234 import *
 import csv
 from surprise.prediction_algorithms.matrix_factorization import NMF
+from surprise.prediction_algorithms.matrix_factorization import SVD
 from surprise import KNNWithMeans
 from surprise.model_selection import *
 from surprise.model_selection import cross_validate
@@ -159,37 +160,14 @@ def plot_roc(fpr, tpr,t, file_name=None):
     if file_name is not None:
         plt.savefig(file_name, bbox_inches='tight')
 
-def get_roc_params_KNN():
-    sim_options = {'name' : 'pearson' , 'user_based' : True} ############### user based #################
-    Threshold = [2.5, 3, 3.5, 4]
-    best_k = 20
+
+def get_roc_params(algo, data, threshold):
     trainset, testset = train_test_split(data, test_size=0.1, train_size=None, random_state=None, shuffle=True)
-    algo = KNNWithMeans(k=best_k, sim_options=sim_options,verbose=True)
     algo.fit(trainset)
     predictions = algo.test(testset)
     trui = [ getattr(r,'r_ui') for r in predictions ]
     est = [ getattr(r,'est') for r in predictions ]
-
-    fpr = {}
-    tpr = {}
-    t   = {}
-    for i, t in enumerate(Threshold):
-        trui_bin = [1 if r > t else 0 for r in trui]
-        # est_bin = [1 if r > t else 0 for r in est]
-        fpr[i], tpr[i], _ = metrics.roc_curve(trui_bin,est)
-        plot_roc(fpr[i],tpr[i],t)
-    return fpr, tpr, t
-
-def get_roc_params_NMF():
-    Threshold = [2.5, 3, 3.5, 4]
-    best_k = 20
-    trainset, testset = train_test_split(data, test_size=0.1, train_size=None, random_state=None, shuffle=True)
-    algo = NMF(best_k, verbose=False)
-    algo.fit(trainset)
-    predictions = algo.test(testset)
-    trui = [ getattr(r,'r_ui') for r in predictions ]
-    est = [ getattr(r,'est') for r in predictions ]
-
+    
     fpr = {}
     tpr = {}
     t   = {}
@@ -201,16 +179,27 @@ def get_roc_params_NMF():
     return fpr, tpr, t
 
 
-# Need to add third algorithm 
-fpr_knn, tpr_knn, t_knn = get_roc_params_KNN()
-fpr_nmf, tpr_nmf, t_nmf = get_roc_params_NMF()
+Threshold = [2.5, 3, 3.5, 4] # thresholds
+# KNN
+best_k = 20
+sim_options = {'name' : 'pearson' , 'user_based' : True}
+algo = KNNWithMeans(k=best_k, sim_options=sim_options,verbose=True)
+fpr_knn, tpr_knn, t_knn = get_roc_params(algo=algo, data=data, threshold=Threshold)
+# NMF
+best_k = 20
+fpr_nmf, tpr_nmf, t_nmf = get_roc_params(algo=NMF(best_k, verbose=False), data=data, threshold=Threshold)
+# MF
+best_k = 20
+fpr_svd, tpr_svd, t_svd = get_roc_params(algo=SVD(best_k, verbose=False), data=data, threshold=Threshold)
 
 for i, thresh in enumerate(Threshold):
     fig, ax = plt.subplots()
     roc_auc_knn = auc(fpr_knn[i], tpr_knn[i])
     roc_auc_nmf = auc(fpr_nmf[i], tpr_nmf[i])
+    roc_auc_svd = auc(fpr_svd[i], tpr_svd[i])
     ax.plot(fpr_knn[i], tpr_knn[i], lw=2, label='area under curve = %0.4f' % roc_auc_knn)
     ax.plot(fpr_nmf[i], tpr_nmf[i], lw=2, label='area under curve = %0.4f' % roc_auc_nmf)
+    ax.plot(fpr_svd[i], tpr_svd[i], lw=2, label='area under curve = %0.4f' % roc_auc_svd)
     ax.grid(color='0.7', linestyle='--', linewidth=1)
     ax.set_xlim([-0.1, 1.1])
     ax.set_ylim([0.0, 1.05])
