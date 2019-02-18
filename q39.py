@@ -158,9 +158,13 @@ if __name__ == '__main__':
 
     # Q 39 here
 
-plt.plot(Re1,Pr1)
-# plt.plot(Re2,Pr2)
-plt.plot(Re3,Pr3)
+plt.plot(Re1,Pr1, label = 'KNN')
+# plt.plot(Re2,Pr2,label = 'NNMF')
+plt.plot(Re3,Pr3, label = 'MF')
+plt.xlabel('Recall', size=15)
+plt.ylabel('Precision', size=15)
+plt.title('Combined', size=15)
+plt.legend(fontsize=15)
 plt.show()
 
 
