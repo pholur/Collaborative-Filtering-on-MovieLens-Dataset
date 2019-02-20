@@ -72,6 +72,31 @@ if __name__ == '__main__':
     # Question 28
     print("\nTrimmed Test Set: High-variance movies")
     trimmed_test_MF(data, 3)
+    #Question 29
+    Threshold = [2.5, 3, 3.5, 4]  # thresholds
+    # MF
+    best_k = 20
+    fpr_svd, tpr_svd, t_svd = get_roc_params(algo=SVD(best_k, verbose=False), data=data, threshold=Threshold)
+
+    for i, thresh in enumerate(Threshold):
+        fig, ax = plt.subplots()
+        roc_auc_svd = auc(fpr_svd[i], tpr_svd[i])
+
+        ll3 = 'MF area under curve = %0.4f' % roc_auc_svd
+
+        l3, = ax.plot(fpr_svd[i], tpr_svd[i], lw=2)
+        ax.grid(color='0.7', linestyle='--', linewidth=1)
+        ax.set_xlim([-0.1, 1.1])
+        ax.set_ylim([0.0, 1.05])
+        ax.set_xlabel('False Positive Rate', size=15)
+        ax.set_ylabel('True Positive Rate', size=15)
+        ax.legend((l3,), (ll3,), loc="lower right")
+
+        for label in ax.get_xticklabels() + ax.get_yticklabels():
+            label.set_fontsize(15)
+        plt.title('Threshold  = %0.2f' % thresh, size=15)
+        plt.savefig('q29'+str(thresh)+'.png', bbox_inches='tight')
+        plt.show()
 
 
     
