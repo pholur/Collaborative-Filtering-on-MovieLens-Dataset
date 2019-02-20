@@ -16,9 +16,9 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 from sklearn import metrics
 
-file_path = './ml-latest-small/ratings.csv'
+f_path = './ml-latest-small/ratings.csv'
 reader = Reader(line_format='user item rating timestamp', sep=',', rating_scale=(0.5, 5), skip_lines=1)
-data = Dataset.load_from_file(file_path, reader=reader)
+data = Dataset.load_from_file(f_path, reader=reader)
 
 
 def plotgraphs(x_axis, y_axis, nameofxaxis='x-axis', nameofyaxis='y-axis', title='Title', file_name=None):

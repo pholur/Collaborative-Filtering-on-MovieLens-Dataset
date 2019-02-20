@@ -110,7 +110,6 @@ def cross_val_(data, G_max, t, algo):
     return pr / 10.0, re / 10.0
 
 
-
 if __name__ == '__main__':
     data = retrieve_data()
     G_max = ret_mod_user_dict(data)
@@ -120,43 +119,52 @@ if __name__ == '__main__':
     algo_KNN = KNNWithMeans(k=KNN_no_of_LF, sim_options=sim_options,verbose=False)
 
     # Q36
-    Pr = []
-    Re = []
+    Pr1 = []
+    Re1 = []
     t = list(range(1,26))
     for l in t:
         Precision, Recall = cross_val_(data, G_max, l, algo_KNN)
-        Pr.append(Precision)
-        Re.append(Recall)
+        Pr1.append(Precision)
+        Re1.append(Recall)
 
-    plotgraphs(t, Pr, "Number of Suggestions", "Precision", "Precision Curve for KNN")
-    plotgraphs(t, Re, "Number of Suggestions", "Recall", "Recall Curve for KNN")
-    plotgraphs(Re, Pr, "Recall", "Precision", "Precision-Recall Curve for KNN")
+    plotgraphs(t, Pr1, "Number of Suggestions", "Precision", "Precision Curve for KNN")
+    plotgraphs(t, Re1, "Number of Suggestions", "Recall", "Recall Curve for KNN")
+    plotgraphs(Re1, Pr1, "Recall", "Precision", "Precision-Recall Curve for KNN")
 
     # Q37
-    Pr = []
-    Re = []
+    Pr2 = []
+    Re2 = []
     for l in t:
         Precision, Recall = cross_val_(data, G_max, l, algo_NMF)
-        Pr.append(Precision)
-        Re.append(Recall)
+        Pr2.append(Precision)
+        Re2.append(Recall)
 
-    plotgraphs(t, Pr, "Number of Suggestions", "Precision", "Precision Curve for NNMF")
-    plotgraphs(t, Re, "Number of Suggestions", "Recall", "Recall Curve for NNMF")
-    plotgraphs(Re, Pr, "Recall", "Precision", "Precision-Recall Curve for NNMF")
+    plotgraphs(t, Pr2, "Number of Suggestions", "Precision", "Precision Curve for NNMF")
+    plotgraphs(t, Re2, "Number of Suggestions", "Recall", "Recall Curve for NNMF")
+    plotgraphs(Re2, Pr2, "Recall", "Precision", "Precision-Recall Curve for NNMF")
 
     # Q38
-    Pr = []
-    Re = []
+    Pr3 = []
+    Re3 = []
     for l in t:
         Precision, Recall = cross_val_(data, G_max, l, algo_SVD)
-        Pr.append(Precision)
-        Re.append(Recall)
+        Pr3.append(Precision)
+        Re3.append(Recall)
 
-    plotgraphs(t, Pr, "Number of Suggestions", "Precision", "Precision Curve for MF")
-    plotgraphs(t, Re, "Number of Suggestions", "Recall", "Recall Curve for MF")
-    plotgraphs(Re, Pr, "Recall", "Precision", "Precision-Recall Curve for MF")
+    plotgraphs(t, Pr3, "Number of Suggestions", "Precision", "Precision Curve for MF")
+    plotgraphs(t, Re3, "Number of Suggestions", "Recall", "Recall Curve for MF")
+    plotgraphs(Re3, Pr3, "Recall", "Precision", "Precision-Recall Curve for MF")
 
-    # Q 39 here
+plt.plot(Re1,Pr1, label = 'KNN')
+plt.plot(Re2,Pr2,label = 'NNMF')
+plt.plot(Re3,Pr3, label = 'MF')
+plt.xlabel('Recall', size=15)
+plt.ylabel('Precision', size=15)
+plt.title('Comparison of Precision-Recall Trade-Off', size=15)
+plt.legend(fontsize=10)
+plt.draw()
+plt.savefig('PR_all.png', bbox_inches='tight')
+plt.show()
 
 
 
