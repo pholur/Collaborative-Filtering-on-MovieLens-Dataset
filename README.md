@@ -1,4 +1,4 @@
-# DataMiningP3
+# Collaborative Filtering on MovieLens Dataset
 ## How to run our code:
 The files in the folder are the result of Project 3: Collaborative Filtering, part of the 5 project series in ECE 219: Large-Scale Data Mining. The code repo contains \*.py files that contain functionality of 1 or more than 1 question from the spec. The names of the files are self-explanatory. This project has been developed by Ravi Teja, Pavan Holur, Donna Branchevsky and Megan Williams | Winter 2019
 
