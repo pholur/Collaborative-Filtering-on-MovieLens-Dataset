@@ -12,4 +12,4 @@ The files use neighboring files to include pre-written packages. Please do not m
 Install pip and then perform
 >> pip install <package>
 
-Tested on Python 2; should run on Python 3 as well with print exceptions.
+Tested on Python 2; should run on Python 3 as well with print exceptions. The results can be found in Results.pdf.
